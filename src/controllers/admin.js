@@ -8,7 +8,7 @@ const config = require("../config/config");
 const registerAdmin = async (req, res) => {
   try {
     const createAdmin = await new Admin(req.body).save();
-    res.status(201).json(responseStatus(true, "created", "Admin", createAdmin));
+    res.status(201).json(responseStatus(true, "created", "Admin", ""));
   } catch (error) {
     res.status(404).json(responseStatus(false, "not-found", `${error}`));
   }
