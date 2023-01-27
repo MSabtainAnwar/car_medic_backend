@@ -2,7 +2,12 @@ const Admin = require("../models/admin");
 // status-helper
 const responseStatus = require("../helpers/status");
 const bcrypt = require("Bcrypt");
+// JWT
+const jwt = require("jsonwebtoken");
+// config
+const config = require("../config/config");
 
+// Middlewares for Register
 const registerMiddle = async (req, res, next) => {
   try {
     const { phone, password, confirmPassword } = req.body;
@@ -29,6 +34,7 @@ const registerMiddle = async (req, res, next) => {
   }
 };
 
+// Middlewares for Login
 const loginMiddle = async (req, res, next) => {
   try {
     const { phone, password } = req.body;
@@ -52,4 +58,18 @@ const loginMiddle = async (req, res, next) => {
   }
 };
 
-module.exports = { registerMiddle, loginMiddle };
+// Middlewares for Verify Token
+const verifyTokenMiddle = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const { token } = await Admin.findOne({ _id: id });
+    const tokenVerification = jwt.verify(token, config.jwtSecretKey);
+    next();
+    console.log(tokenVerification);
+  } catch (error) {
+    res.status(404).json(responseStatus(false, "not-found", `${error}`));
+  }
+};
+
+module.exports = { registerMiddle, loginMiddle, verifyTokenMiddle };

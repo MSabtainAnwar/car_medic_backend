@@ -1,11 +1,13 @@
 const express = require("express");
 const app = express();
+var cookieParser = require("cookie-parser");
 // colors
 const colors = require("./src/loader/colors");
 // config
 const config = require("./src/config/config");
 
 // Loaders
+app.use(cookieParser());
 require("./src/loader/cors")(app);
 require("./src/loader/db")();
 require("./src/loader/routers")(app);

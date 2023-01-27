@@ -25,21 +25,24 @@ const loginAdmin = async (req, res) => {
       }).select("-token -password");
       console.log(adminData);
       res.status(200).json(responseStatus(true, "ok", "Success", adminData));
-      res.cookie("jwt", updateAdmin.token, {
-        expires: new Date(Date.now() + 50000),
-        httpOnly: true,
-        // secure:true
-      });
     }
   } catch (error) {
     res.status(404).json(responseStatus(false, "not-found", `${error}`));
   }
 };
 
-module.exports = { registerAdmin, loginAdmin };
+// verify-admin-token-by-id
+const verifyAdminToken = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const adminData = await Admin.findOne({ _id: id }).select(
+      "-token -password"
+    );
+    console.log(adminData);
+    res.status(200).json(responseStatus(true, "ok", "Success", adminData));
+  } catch (error) {
+    res.status(404).json(responseStatus(false, "not-found", `${error}`));
+  }
+};
 
-
-
-
-
-
+module.exports = { registerAdmin, loginAdmin, verifyAdminToken };

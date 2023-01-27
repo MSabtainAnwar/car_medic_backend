@@ -36,8 +36,14 @@ const adminSchema = mongoose.Schema(
 //Methods-middleware
 adminSchema.methods.createToken = async function (key) {
   try {
-    console.log(key);
-    const token = jwt.sign({ _id: this._id }, key);
+    console.log(this);
+    const token = jwt.sign(
+      {
+        _id: this._id,
+      },
+      key,
+      { expiresIn: "10s" }
+    );
     this.token = token;
     await this.save();
     return this;
